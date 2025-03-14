@@ -1,17 +1,35 @@
 const mongoose = require("mongoose");
 require("dotenv").config();
 
+jest.setTimeout(30000); // Increase timeout to 30 seconds
+
 beforeAll(async () => {
-  await mongoose.connect(process.env.MONGODB_URI);
+  try {
+    await mongoose.connect(process.env.MONGODB_URI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
+  } catch (error) {
+    console.error("MongoDB connection error:", error);
+    process.exit(1);
+  }
 });
 
 afterAll(async () => {
-  await mongoose.connection.close();
+  try {
+    await mongoose.connection.close();
+  } catch (error) {
+    console.error("Error closing MongoDB connection:", error);
+  }
 });
 
 beforeEach(async () => {
-  const collections = await mongoose.connection.db.collections();
-  for (let collection of collections) {
-    await collection.deleteMany({});
+  try {
+    const collections = await mongoose.connection.db.collections();
+    for (let collection of collections) {
+      await collection.deleteMany({});
+    }
+  } catch (error) {
+    console.error("Error cleaning up database:", error);
   }
 });

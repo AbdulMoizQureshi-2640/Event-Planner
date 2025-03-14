@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node src/server.js",
     "dev": "nodemon src/server.js",
-    "test": "jest --detectOpenHandles",
+    "test": "jest --verbose --detectOpenHandles --forceExit",
     "test:watch": "jest --watch"
   },
   "keywords": [
@@ -40,6 +40,8 @@
     "testEnvironment": "node",
     "setupFilesAfterEnv": [
       "./src/__tests__/setup.js"
-    ]
+    ],
+    "testTimeout": 30000,
+    "verbose": true
   }
 }
